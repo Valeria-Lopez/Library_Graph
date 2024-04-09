@@ -1,2 +1,12 @@
 # Library_Graph
-Biblioteca orientada a objetos para grafos
+Biblioteca de generación y manejo de grafos.
+
+Utiliza programación orientada a objetos. Cuenta con funciones para generar grafos con los siguientes modelos de generación:
+
+* Malla
+* Erdos y Rényi
+* Gilbert
+* Geográfico simple
+* Barabási-Albert
+* Dorogovtsev-Mendes
+
