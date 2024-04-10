@@ -49,6 +49,3 @@ def geoGraph(n, r):
            
     g.save_gephi('geografico' + str(n) + '_' + str(r))            
     return print('ok')
-
-
-H = geoGraph(50, 2)
