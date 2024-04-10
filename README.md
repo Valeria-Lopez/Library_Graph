@@ -12,6 +12,6 @@ Utiliza programación orientada a objetos. Cuenta con funciones para generar gra
 
 Genera grafos compatibles con GraphViz DOT
 
-# Contacto
+# Autor
 Valeria López Rodríguez - vlopez_1597@hotmail.com
-Link del Proyecto: 
+Link del Proyecto: https://github.com/Valeria-Lopez/Library_Graph
