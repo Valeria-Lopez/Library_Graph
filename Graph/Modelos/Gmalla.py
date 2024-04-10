@@ -36,7 +36,3 @@ def graph_malla(m=0,n=0):
     
     g.save_gephi('malla' + str(m) + '_' + str(n))
     return print('ok')
-
-
-
-G=graph_malla(500,100)
