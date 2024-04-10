@@ -10,3 +10,8 @@ Utiliza programación orientada a objetos. Cuenta con funciones para generar gra
 * Barabási-Albert
 * Dorogovtsev-Mendes
 
+Genera grafos compatibles con GraphViz DOT
+
+# Contacto
+Valeria López Rodríguez - vlopez_1597@hotmail.com
+Link del Proyecto: 
