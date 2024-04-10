@@ -47,6 +47,3 @@ def graphDorogov_Mendes(n):
             
     g.save_gephi('dorogovtsevMendes' + str(n))
     return print('ok')
-
-
-G = graphDorogov_Mendes(500)
