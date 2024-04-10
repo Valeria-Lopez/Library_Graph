@@ -50,6 +50,3 @@ def barabasiAlbertGraph(n, d):
     g.save_gephi('barabasiAlbert' + str(n) + '_' + str(d))
     return print('ok')
          
-
-     
-K = barabasiAlbertGraph(500, 5)
