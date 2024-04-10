@@ -40,7 +40,4 @@ def graphErdosRenyi(n,m):
                
     g.save_gephi('ErdosRenyi_' + str(n) + '_' + str(m))
     return print('ok')
-              
-
-H = graphErdosRenyi(500,997)
 
