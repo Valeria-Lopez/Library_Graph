@@ -47,6 +47,3 @@ def graphGilbert(n,p):
     g.save_gephi('gilbert' + str(n) + '_' + str(p))
     return print('ok')
    
-              
-
-H = graphGilbert(500,0.25)
