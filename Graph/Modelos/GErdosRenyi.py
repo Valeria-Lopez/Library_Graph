@@ -9,17 +9,22 @@ from Clases import Grafo, Nodo, Edge
 import random
 
 
-def graphErdosRenyi(n,m):
+def graphErdosRenyi(n,m,nodo_s=0):
     """Genera un grafo con el modelo de Erdos y Rényi.
     Crea n nodos y al azar se generan m cantidad de aristas.
+    También se generan los grafos de BFS y DFS (recursivo e iterativo).
     Args:
         n (int): Indica la cantidad de nodos en el grafo.
         m (int): Número de aristas en el grafo.
+        nodo_s (int): Nodo raíz desde donde se inician las búsquedas.
         
     Returns:
         _DOT_: Archivo que contiene los nodos y aristas del grafo.
     """
     g = Grafo()
+    
+    if nodo_s > n:
+        raise ValueError()
     
     nodos_list = []
     
@@ -39,5 +44,7 @@ def graphErdosRenyi(n,m):
                g.add_edge(arista)
                
     g.save_gephi('ErdosRenyi_' + str(n) + '_' + str(m))
-    return print('ok')
-
+    g.bfs(g.get_nodo(nodo_s), 'ErdosRenyi_bfs'+ str(n) + '_' + str(m))
+    g.dfs_recursivo(g.get_nodo(nodo_s), 'ErdosRenyi_dfsrec'+ str(n) + '_' + str(m))
+    g.dfs_iterativo(g.get_nodo(nodo_s), 'ErdosRenyi_dfsit'+ str(n) + '_' + str(m))
+              
