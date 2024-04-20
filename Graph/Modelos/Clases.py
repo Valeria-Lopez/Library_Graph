@@ -129,13 +129,133 @@ class Grafo:
             if nodo_name == v.get_name():
                 return v
         print(f'Nodo {nodo_name} no existe')
+        
+        
+    def bfs(self, nodo_origen, nombre_archivo:str):
+        """Desde un nodo raíz visita todos los nodos adyaentes a él
+        antes de pasar al siguiente nivel, para al final obtener un grafo.
+        
+        Args:
+            nodo_origen (int): Nodo desde donde el algoritmo inicia la búsqueda.
+            nombre_archivo (str): Nombre que llevará el archivo .DOT
             
+        Returns:
+            _.dot_: Archivo .DOT que contiene el grafo.
+        """
+        file = open(nombre_archivo + '.dot', "w")
+        h = " "
+        nodos_descubiertos = []
+        cola = []
+        nodos_descubiertos.append(nodo_origen)
+        cola.append(nodo_origen)
+        while cola:
+            m = cola.pop(0)
+            
+            for vecino in self.diccionario[m]:
+                if vecino not in nodos_descubiertos:
+                    nodos_descubiertos.append(vecino)
+                    cola.append(vecino)
+                    h += str(m.get_name()) + ' -> ' + str(vecino.get_name()) + ';' + '\n'
+        file.write('digraph {' + h + '}')
+        file.close()
+    
+    
+    def dfs_recursivo(self, nodo, archivo_name):
+        """Desde un nodo raíz visita todos los nodos a los que puede acceder
+        desde él de manera recursiva siguiendo una rama, antes de retroceder 
+        y explorar otra rama, al final se obtiene un grafo.
+        
+        Args:
+            nodo (int): Nodo desde donde el algoritmo inicia la búsqueda.
+            archivo_name (str): Nombre que llevará el archivo .DOT
+                
+        Returns:
+            _.dot_: Archivo .DOT que contiene el grafo.
+        """
+        file = open(archivo_name + '.dot', "w")
+        file.write('digraph {')
+        nodo_anterior = nodo
+        nodos_visitados = set()
+        self.dfs_utilrec(nodo, nodos_visitados, nodo_anterior, file)
+        file.write('}')
+        file.close()
+        
+        
+    def dfs_utilrec(self, nodo, nodos_visitados, nodo_anterior, file):
+        """Realiza el proceso de recursión para el algoritmo de búsqueda DFS.
+        
+        Args:
+            nodo (int): Nodo desde donde el algoritmo inicia la búsqueda.
+            nodos_visitados (set): Lista de los nodo visitados.
+            nodo_anterior (int): Guarda el nodo visitado anterior.
+            file (.dot): Archivo .DOT donde se guarda el grafo.
+        """
+        h = ''
+        if nodo_anterior != nodo:
+            h = str(nodo_anterior.get_name()) + ' -> ' + str(nodo.get_name()) + ';' + '\n'
+        nodo_anterior = nodo
+        nodos_visitados.add(nodo)
+        file.write(h)
+        
+        for vecino in self.diccionario[nodo]:
+            if vecino not in nodos_visitados:
+                self.dfs_utilrec(vecino, nodos_visitados, nodo_anterior, file)
+        
+    
+    def dfs_iterativo(self, nodo, archivo_name):
+        """Desde un nodo raíz visita todos los nodos a los que puede acceder
+        desde él de manera iterativa siguiendo una rama, antes de retroceder 
+        y explorar otra rama, al final se obtiene un grafo.
+        
+        Args:
+            nodo (int): Nodo desde donde el algoritmo inicia la búsqueda.
+            archivo_name (str): Nombre que llevará el archivo .DOT
+                
+        Returns:
+            _.dot_: Archivo .DOT que contiene el grafo.
+        """
+        h = ''
+        file = open(archivo_name + '.dot', "w")
+        file.write('digraph {')
+        visitados = []
+        cola = []
+        arista = []
+        
+        cola.append(nodo)
+        visitados.append(nodo)
+        
+        while cola:
+            s = cola.pop()
+        
+            for j in visitados[::-1]:
+                if s in self.diccionario[j]:
+                    if s not in visitados:
+                        if [j,s] in arista:
+                            break
+                        if [j,s] not in arista:
+                            h += str(j.get_name()) + ' -> ' + str(s.get_name()) + ';' + '\n'
+                            arista.append([j,s])
+                            break
+                
+            if s not in visitados:
+                visitados.append(s)
+            
+            for i in self.diccionario[s][::-1]:
+                if i not in visitados:
+                    cola.append(i)
+        file.write(h)
+        file.write('}')
+        file.close()
+        
             
     def save_gephi(self, nombre_archivo:str):
         """Guarda el grafo generado en un archivo DOT.
 
         Args:
             nombre_archivo (str): Nombre con el que se guardará el archivo.
+            
+        Returns:
+            _.dot_: Archivo .DOT que contiene el grafo.
         """
         file = open(nombre_archivo + '.dot', "w")
         all_aristas = ''
@@ -175,5 +295,4 @@ class Undirected_graph(Grafo):
         Grafo.add_edge(self, arista)
         arista_back = Edge(arista.get_destino(), arista.get_origen())
         Grafo.add_edge(self, arista_back)
-
 
