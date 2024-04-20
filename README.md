@@ -10,6 +10,8 @@ Utiliza programación orientada a objetos. Cuenta con funciones para generar gra
 * Barabási-Albert
 * Dorogovtsev-Mendes
 
+Además, implementa los algoritmos BFS y DFS (iterativo y recursivo) dado un nodo fuente, calculando el árbol inducido.
+
 Genera grafos compatibles con GraphViz DOT
 
 # Autor
