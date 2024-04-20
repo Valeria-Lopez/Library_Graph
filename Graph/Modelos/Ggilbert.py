@@ -9,18 +9,23 @@ from Clases import Grafo, Nodo, Edge, Undirected_graph
 import random
 
 
-def graphGilbert(n,p):
+def graphGilbert(n,p,nodo_s=0):
     """Genera un grafo con el modelo de Gilbert.
     Crea n nodos y crea una arista entre cada par con probabilidad p.
+    También se generan los grafos de BFS y DFS (recursivo e iterativo).
     
     Args:
         n (int): Indica la cantidad de nodos en el grafo.
         p (float): Probabilidad de crear una arista.
+        nodo_s (int): Nodo raíz desde donde se inician las búsquedas.
         
     Returns:
         _DOT_: Archivo que contiene los nodos y aristas del grafo.
     """
     if n < 1 or p < 0 or p > 1:
+        raise ValueError()
+        
+    if nodo_s > n:
         raise ValueError()
     
     enlaces = ((n*(n-1))/2)*(p)
@@ -45,5 +50,7 @@ def graphGilbert(n,p):
                g.add_edge(arista)
     
     g.save_gephi('gilbert' + str(n) + '_' + str(p))
-    return print('ok')
+    g.bfs(g.get_nodo(nodo_s), 'gilbert_bfs' + str(n) + '_' + str(p))
+    g.dfs_recursivo(g.get_nodo(nodo_s), 'gilbert_dfsrec' + str(n) + '_' + str(p))
+    g.dfs_iterativo(g.get_nodo(nodo_s), 'gilbert_dfsit' + str(n) + '_' + str(p))
    
