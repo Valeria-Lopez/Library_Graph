@@ -54,4 +54,7 @@ def geoGraph(n, r, nodo_s=0):
     g.save_gephi('geografico' + str(n) + '_' + str(r))
     g.bfs(g.get_nodo(nodo_s), 'geografico_bfs' + str(n) + '_' + str(r))
     g.dfs_recursivo(g.get_nodo(nodo_s), 'geografico_dfsrec' + str(n) + '_' + str(r))
-    g.dfs_iterativo(g.get_nodo(nodo_s), 'geografico_dfsit' + str(n) + '_' + str(r))         
+    g.dfs_iterativo(g.get_nodo(nodo_s), 'geografico_dfsit' + str(n) + '_' + str(r))
+    g.dijkstra(nodo_s)
+
+
