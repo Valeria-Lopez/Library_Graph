@@ -57,4 +57,5 @@ def barabasiAlbertGraph(n, d, nodo_s=0):
     g.bfs(g.get_nodo(nodo_s), 'barabasiAlbert_bfs' + str(n) + '_' + str(d))
     g.dfs_recursivo(g.get_nodo(nodo_s), 'barabasiAlbert_dfsrec' + str(n) + '_' + str(d))
     g.dfs_iterativo(g.get_nodo(nodo_s), 'barabasiAlbert_dfsit' + str(n) + '_' + str(d))
+    g.dijkstra(nodo_s)
          
