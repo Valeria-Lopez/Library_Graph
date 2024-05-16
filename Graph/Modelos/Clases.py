@@ -4,7 +4,7 @@ Created on Sat Mar 16 11:50:47 2024
 
 @author: vlope
 """
-
+import sys, random, heapq
 
 class Nodo:
     """ Permite representar un nodo dentro de un grafo."""
@@ -244,6 +244,81 @@ class Grafo:
                 if i not in visitados:
                     cola.append(i)
         file.write(h)
+        file.write('}')
+        file.close()
+
+
+     def dijkstra(self, s):
+        """Encuentra el camino más corto entre un nodo origen y todos los otros
+        nodos a los que puede acceder. Usa los valores de las aristas para
+        encontrar el camino que minimiza el valor total entre el nodo origen
+        y los demás nodos del grafo.
+        
+        Args:
+            s (int): Nodo origen desde donde el algoritmo empieza a encontrar
+            el camino más corto a los demás nodos del grafo.
+                
+        Returns:
+            _generado.dot_: Archivo .DOT que contiene el grafo.
+            _dijkstra.dot_: Archivo .DOT que contiene los caminos más cortos
+            del nodo origen a todos los demás nodos.
+
+        """
+        new_dic = {}
+        for l in self.diccionario.keys():
+            new_dic.setdefault(l.get_name(),{})
+            for valor in self.diccionario[l]:
+                new_dic[l.get_name()].setdefault(valor.get_name(),random.randint(1,30))
+        
+        inf = sys.maxsize
+        nodo_data ={}
+        for nodo in new_dic.keys():
+            nodo_data.setdefault(nodo,{'cost':inf,'pred':[]})
+        
+        nodo_data[s]['cost'] = 0
+        temp = s
+        queue = [(nodo_data[s]['cost'],temp)]
+        
+        while queue:
+            distancia, nodo = heapq.heappop(queue)
+            if distancia > nodo_data[nodo]['cost']:
+                continue
+            for vecino, peso in new_dic[nodo].items():
+                costo = distancia + peso
+                if costo < nodo_data[vecino]['cost']:
+                    nodo_data[vecino]['cost'] = costo
+                    k = []
+                    k.append(nodo)
+                    nodo_data[vecino]['pred'] = nodo_data[nodo]['pred'] + k
+                    heapq.heappush(queue, (nodo_data[vecino]['cost'],vecino))
+                    
+        file = open('dijkstra.dot', "w")
+        file.write('digraph dijkstra {')
+        for nodos in nodo_data.keys():
+            if nodo_data[nodos]['cost'] == inf:
+                file.write(str(nodos) + "[Label=" + str(nodos) + "(inf)" + "];" + "\n")
+            else:
+                file.write(str(nodos) + "[Label=" + str(nodos) + "(" + str(nodo_data[nodos]['cost']) + ")" + "];" + "\n")
+            cont=0
+            ant = nodo_data[nodos]['pred'][::-1]
+            for cvecinos in nodo_data[nodos]['pred'][::-1]:
+                cont += 1
+                if cont == 1:
+                    file.write(str(cvecinos) + " -> " + str(nodos) + "[Label=" + str(new_dic[cvecinos][nodos]) + "];" + "\n")
+                    ant = cvecinos
+                else:
+                    file.write(str(cvecinos) + " -> " + str(ant) + "[Label=" + str(new_dic[cvecinos][ant]) + "];" + "\n")
+                    ant = cvecinos
+        file.write('}')
+        file.close()
+        
+        file = open('generado.dot', "w")
+        file.write('digraph arbol {')
+        for nodos in nodo_data.keys():
+             file.write(str(nodos) + "[Label=" + str(nodos) + "(inf)" + "];" + "\n")
+        for origen in new_dic.keys():
+            for destino in new_dic[origen]:
+                file.write(str(origen) + " -> " + str(destino) + "[Label=" + str(new_dic[origen][destino]) + "];" + "\n")
         file.write('}')
         file.close()
         
