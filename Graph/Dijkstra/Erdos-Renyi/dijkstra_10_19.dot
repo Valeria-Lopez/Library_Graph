@@ -1,0 +1,20 @@
+digraph dijkstra {0[Label=0(17)];
+5 -> 0[Label=17];
+1[Label=1(26)];
+5 -> 1[Label=26];
+2[Label=2(inf)];
+3[Label=3(inf)];
+4[Label=4(14)];
+5 -> 4[Label=14];
+5[Label=5(0)];
+6[Label=6(19)];
+5 -> 6[Label=19];
+7[Label=7(30)];
+6 -> 7[Label=11];
+5 -> 6[Label=19];
+8[Label=8(26)];
+4 -> 8[Label=12];
+5 -> 4[Label=14];
+9[Label=9(30)];
+5 -> 9[Label=30];
+}
