@@ -322,7 +322,108 @@ class Grafo:
         file.write('}')
         file.close()
         
-            
+
+     def prim(self,s):
+        """Encuentra el árbol de expansión mínimo del grafo conectando nodos con
+        aristas de peso mínimo sin formar ciclos.
+        
+        Args:
+            s (int): Nodo origen desde donde el algoritmo empieza a formar el
+                árbol de expansión mínimo.
+                
+        Returns:
+            _generado.dot_: Archivo .DOT que contiene el grafo.
+            _prim.dot: Archivo .DOT que contiene el árbol de expansión mínimo.
+
+        """
+        new_dic = {}
+        for l in self.diccionario.keys():
+            new_dic.setdefault(l.get_name(),{})
+            for valor in self.diccionario[l]:
+                new_dic[l.get_name()].setdefault(valor.get_name(),random.randint(1,10))
+                
+        aristas = []
+        for nodos in new_dic[s]:
+            aristas.append((new_dic[s][nodos],s,nodos))
+        aristas.sort()
+        visitados = set([s])
+        mst = []
+        heapq.heapify(aristas)
+        
+        while aristas:
+            cost, frm, to = heapq.heappop(aristas)
+            if to not in visitados:
+                visitados.add(to)
+                mst.append((frm, to, cost))
+                if new_dic[to] != 0:
+                    for next_nodos in new_dic[to]:
+                        if next_nodos not in visitados:
+                            heapq.heappush(aristas, (new_dic[to][next_nodos], to, next_nodos))
+                continue
+        
+        file = open('prim.dot', "w")
+        file.write('digraph arbol {')
+        while mst:
+            frm, to, cost = heapq.heappop(mst)
+            file.write(str(frm) + " -> " + str(to) + "[Label=" + str(cost) + "];" + "\n")
+        file.write('}')
+        file.close()
+        
+        file = open('generado.dot', "w")
+        file.write('digraph {')
+        for origen in new_dic.keys():
+            if new_dic[origen] == 0:
+                file.write(str(origen) + ";" + "\n")
+            for destino in new_dic[origen]:
+                file.write(str(origen) + " -> " + str(destino) + "[Label=" + str(new_dic[origen][destino]) + "];" + "\n")
+        file.write('}')
+        file.close()
+        
+        
+    def kruskal(self, num_nodos):
+        """Construye el árbol de expansión mínimo formado por las aristas
+        sucesivamente seleccionadas por su peso mínimo.
+        
+        Args:
+            num_nodos (int): Número de nodos que contiene el grafo.
+                
+        Returns:
+            _generado.dot_: Archivo .DOT que contiene el grafo.
+            _kruskal.dot_:  Archivo .DOT que contiene el árbol de expansión mínimo.
+
+        """
+        aristas = []
+        for orig in self.diccionario.keys():
+            for dest in self.diccionario[orig]:
+                aristas.append((random.randint(1, 10),orig.get_name(),dest.get_name()))
+        uf = UnionFind(num_nodos)
+        aristas.sort()
+        mst = []
+        heapq.heapify(aristas)
+        
+        for cost, frm, to in aristas:
+            if uf.find(frm) != uf.find(to):
+                uf.union(frm, to)
+                mst.append((frm,to,cost))
+                if len(mst) == num_nodos-1:
+                    break
+        
+        file = open('kruskal.dot', "w")
+        file.write('digraph arbol {')
+        while mst:
+            frm, to, cost = heapq.heappop(mst)
+            file.write(str(frm) + " -> " + str(to) + "[Label=" + str(cost) + "];" + "\n")
+        file.write('}')
+        file.close()
+        
+        file = open('generado.dot', "w")
+        file.write('digraph {')
+        for cost, frm, to in aristas:
+            file.write(str(frm) + " -> " + str(to) + "[Label=" + str(cost) + "];" + "\n")
+        file.write('}')
+        file.close()
+
+
     def save_gephi(self, nombre_archivo:str):
         """Guarda el grafo generado en un archivo DOT.
 
@@ -370,4 +471,29 @@ class Undirected_graph(Grafo):
         Grafo.add_edge(self, arista)
         arista_back = Edge(arista.get_destino(), arista.get_origen())
         Grafo.add_edge(self, arista_back)
+
+
+class UnionFind:
+    def __init__(self,size):
+        self.root = list(range(size))
+        self.rank = [1]*size
+        
+        
+    def find(self, x):
+        if self.root[x] != x:
+            self.root[x] = self.find(self.root[x])
+        return self.root[x]
+    
+    
+    def union(self, x, y):
+        rootX = self.find(x)
+        rootY = self.find(y)
+        if rootX != rootY:
+            if self.rank[rootX] > self.rank[rootY]:
+                self.root[rootY] = rootX
+            elif self.rank[rootX] < self.rank[rootY]:
+                self.root[rootX] = rootY
+            else:
+                self.root[rootY] = rootX
+                self.rank[rootX] +=1
 
