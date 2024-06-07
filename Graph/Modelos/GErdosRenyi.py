@@ -48,4 +48,8 @@ def graphErdosRenyi(n,m,nodo_s=0):
     g.dfs_recursivo(g.get_nodo(nodo_s), 'ErdosRenyi_dfsrec'+ str(n) + '_' + str(m))
     g.dfs_iterativo(g.get_nodo(nodo_s), 'ErdosRenyi_dfsit'+ str(n) + '_' + str(m))
     g.dijkstra(nodo_s)
+    g.prim(nodo_s)
+    g.kruskal(n)
+
+
               
