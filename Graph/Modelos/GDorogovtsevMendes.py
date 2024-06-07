@@ -55,4 +55,6 @@ def graphDorogov_Mendes(n, nodo_s=0):
     g.dfs_recursivo(g.get_nodo(nodo_s), 'dorogovtsevMendes_dfsrec' + str(n))
     g.dfs_iterativo(g.get_nodo(nodo_s), 'dorogovtsevMendes_dfsit' + str(n))
     g.dijkstra(nodo_s)
+    g.prim(nodo_s)
+    g.kruskal(n+3)
 
