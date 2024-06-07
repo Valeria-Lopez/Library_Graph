@@ -52,10 +52,23 @@ def barabasiAlbertGraph(n, d, nodo_s=0):
                     if degree[nodos] == d:
                         break
                     continue
+        else:
+            for p in nodos_list:
+                if p != nodos:
+                    g.add_edge(Edge(g.get_nodo(nodos), g.get_nodo(p)))
+                    degree[p] += 1
+                    degree[nodos] += 1
+                    if degree[nodos] == d:
+                        break
+                    continue
                 
     g.save_gephi('barabasiAlbert' + str(n) + '_' + str(d))
     g.bfs(g.get_nodo(nodo_s), 'barabasiAlbert_bfs' + str(n) + '_' + str(d))
     g.dfs_recursivo(g.get_nodo(nodo_s), 'barabasiAlbert_dfsrec' + str(n) + '_' + str(d))
     g.dfs_iterativo(g.get_nodo(nodo_s), 'barabasiAlbert_dfsit' + str(n) + '_' + str(d))
     g.dijkstra(nodo_s)
+    g.prim(nodo_s)
+    g.kruskal(n)
+
+
          
