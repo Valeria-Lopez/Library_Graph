@@ -54,4 +54,8 @@ def graphGilbert(n,p,nodo_s=0):
     g.dfs_recursivo(g.get_nodo(nodo_s), 'gilbert_dfsrec' + str(n) + '_' + str(p))
     g.dfs_iterativo(g.get_nodo(nodo_s), 'gilbert_dfsit' + str(n) + '_' + str(p))
     g.dijkstra(nodo_s)
+    g.prim(nodo_s)  
+    g.kruskal(n) 
+
+
    
