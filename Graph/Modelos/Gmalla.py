@@ -43,4 +43,8 @@ def graph_malla(m=0,n=0,nodo_s=0):
     g.dfs_recursivo(g.get_nodo(nodo_s), 'malla_dfsrec'+ str(m) + '_' + str(n))
     g.dfs_iterativo(g.get_nodo(nodo_s), 'malla_dfsit'+ str(m) + '_' + str(n))
     g.dijkstra(nodo_s)
+    g.prim(nodo_s)
+    g.kruskal(n*n)
+
+
 
