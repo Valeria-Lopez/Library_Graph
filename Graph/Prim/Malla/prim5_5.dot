@@ -1,0 +1,25 @@
+digraph arbol {0 -> 5[Label=2];
+0 -> 1[Label=4];
+1 -> 2[Label=6];
+5 -> 6[Label=3];
+5 -> 10[Label=4];
+3 -> 4[Label=2];
+6 -> 7[Label=5];
+6 -> 11[Label=6];
+7 -> 8[Label=2];
+8 -> 9[Label=8];
+10 -> 15[Label=9];
+11 -> 12[Label=5];
+11 -> 16[Label=3];
+12 -> 13[Label=5];
+13 -> 14[Label=7];
+15 -> 20[Label=9];
+16 -> 17[Label=2];
+2 -> 3[Label=9];
+17 -> 18[Label=2];
+17 -> 22[Label=2];
+18 -> 19[Label=6];
+18 -> 23[Label=2];
+19 -> 24[Label=5];
+20 -> 21[Label=1];
+}

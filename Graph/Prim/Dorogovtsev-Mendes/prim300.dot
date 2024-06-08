@@ -1,0 +1,7 @@
+digraph arbol {298 -> 140[Label=4];
+0 -> 1[Label=9];
+4 -> 0[Label=3];
+31 -> 2[Label=8];
+31 -> 4[Label=9];
+298 -> 31[Label=7];
+}
