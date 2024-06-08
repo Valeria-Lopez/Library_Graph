@@ -1,6 +1,0 @@
-digraph arbol {19 -> 4[Label=2];
-0 -> 1[Label=3];
-4 -> 0[Label=2];
-19 -> 2[Label=3];
-19 -> 3[Label=7];
-}
