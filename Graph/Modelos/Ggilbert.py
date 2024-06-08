@@ -56,6 +56,7 @@ def graphGilbert(n,p,nodo_s=0):
     g.dijkstra(nodo_s)
     g.prim(nodo_s)  
     g.kruskal(n) 
+    g.kruskalInv()
 
 
    
