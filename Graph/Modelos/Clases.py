@@ -334,6 +334,7 @@ class Grafo:
         Returns:
             _generado.dot_: Archivo .DOT que contiene el grafo.
             _prim.dot: Archivo .DOT que contiene el árbol de expansión mínimo.
+            _MST_ : Imprime el valor del árbol de expansión mínimo.
 
         """
         new_dic = {}
@@ -348,6 +349,7 @@ class Grafo:
         aristas.sort()
         visitados = set([s])
         mst = []
+        MST = 0
         heapq.heapify(aristas)
         
         while aristas:
@@ -355,11 +357,14 @@ class Grafo:
             if to not in visitados:
                 visitados.add(to)
                 mst.append((frm, to, cost))
+                MST += cost
                 if new_dic[to] != 0:
                     for next_nodos in new_dic[to]:
                         if next_nodos not in visitados:
                             heapq.heappush(aristas, (new_dic[to][next_nodos], to, next_nodos))
                 continue
+        
+        print(" El costo del árbol de expansión mínimo es: ", MST)
         
         file = open('prim.dot', "w")
         file.write('digraph arbol {')
@@ -390,6 +395,7 @@ class Grafo:
         Returns:
             _generado.dot_: Archivo .DOT que contiene el grafo.
             _kruskal.dot_:  Archivo .DOT que contiene el árbol de expansión mínimo.
+            _MST_ : Imprime el valor del árbol de expansión mínimo.
 
         """
         aristas = []
@@ -399,14 +405,18 @@ class Grafo:
         uf = UnionFind(num_nodos)
         aristas.sort()
         mst = []
+        MST = 0
         heapq.heapify(aristas)
         
         for cost, frm, to in aristas:
             if uf.find(frm) != uf.find(to):
                 uf.union(frm, to)
                 mst.append((frm,to,cost))
+                MST += cost
                 if len(mst) == num_nodos-1:
                     break
+        
+        print(" El costo del árbol de expansión mínimo es: ", MST)
         
         file = open('kruskal.dot', "w")
         file.write('digraph arbol {')
@@ -422,6 +432,100 @@ class Grafo:
             file.write(str(frm) + " -> " + str(to) + "[Label=" + str(cost) + "];" + "\n")
         file.write('}')
         file.close()
+        
+        
+    def kruskalInv(self):
+        """Construye el árbol de expansión mínimo formado por las aristas
+        sucesivamente seleccionadas por su peso máximo.
+        
+        Args:
+                
+        Returns:
+            _generado.dot_: Archivo .DOT que contiene el grafo.
+            _kruskalInv.dot_:  Archivo .DOT que contiene el árbol de expansión mínimo.
+            _mst_wt_ : Imprime el valor del árbol de expansión mínimo.
+
+        """
+        aristas = []
+        adj = [0] * (len(self.diccionario.keys()))
+        for i in range((len(self.diccionario.keys()))):
+            adj[i] = []
+            
+        for o in self.diccionario.keys():
+            for d in self.diccionario[o]:
+                adj[o.get_name()].append(d.get_name())
+                adj[d.get_name()].append(o.get_name())
+                aristas.append((random.randint(1,10), (o.get_name(), d.get_name())))
+                
+        file = open('generado.dot', "w")
+        file.write('digraph {')
+        for cost, (frm, to) in aristas:
+            file.write(str(frm) + " -> " + str(to) + "[Label=" + str(cost) + "];" + "\n")
+        file.write('}')
+        file.close()
+
+        aristas.sort(key = lambda a: a[0])
+     
+        mst_wt = 0
+        
+        file = open('kruskalInv.dot', "w")
+        file.write('digraph arbol {')
+        
+        for i in range(len(aristas) - 1, -1, -1):
+            u = aristas[i][1][0]
+            v = aristas[i][1][1]
+
+            adj[u].remove(v)
+            adj[v].remove(u)
+
+            if self.connected(adj) == False:
+                adj[u].append(v)
+                adj[v].append(u)
+
+                file.write(str(u) + " -> " + str(v) + "[Label=" + str(aristas[i][0]) + "];" + "\n")
+                mst_wt += aristas[i][0]
+        print(" El costo del árbol de expansión mínimo es: ", mst_wt)
+        
+        file.write('}')
+        file.close()
+                
+        
+    def dfs(self, v, visited, adj):
+        """"Desde un nodo raíz visita todos los nodos a los que puede acceder
+        desde él de manera recursiva siguiendo una rama, antes de retroceder 
+        y explorar otra rama.
+        
+        Args:
+            v (int): Nodo desde donde el algoritmo inicia la búsqueda.
+            visited (list): Contiene los nodos visitados.
+            adj (list): Contiene los vecinos de un nodo.
+
+        """
+        visited[v] = True
+        for i in adj[v]:
+            if not visited[i]:
+                self.dfs(i, visited, adj)
+                
+                
+    def connected(self, adj):
+        """Verifica si el grafo está desconectado después de eliminar una aristas.
+        
+        Args:
+            adj (list): Contiene los vecinos de un nodo.
+                
+        Returns:
+            _Booleano_: (True) si está conectado; (False) si está desconectado.
+
+        """
+        visited = [False] * (len(self.diccionario.keys()))
+        
+        self.dfs(0, visited, adj)
+        
+        for i in range(1, (len(self.diccionario.keys()))):
+            if not visited[i]:
+                return False
+  
+        return True
 
 
     def save_gephi(self, nombre_archivo:str):
