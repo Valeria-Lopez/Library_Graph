@@ -57,4 +57,5 @@ def graphDorogov_Mendes(n, nodo_s=0):
     g.dijkstra(nodo_s)
     g.prim(nodo_s)
     g.kruskal(n+3)
+    g.kruskalInv()
 
