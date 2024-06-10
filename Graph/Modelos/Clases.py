@@ -578,18 +578,42 @@ class Undirected_graph(Grafo):
 
 
 class UnionFind:
+    """Permite realizar la unión de dos conjuntos"""
     def __init__(self,size):
+        """Permite inicializar a la clase unión.
+        
+        Args:
+            size (int): El número de nodos que contiene el grafo.
+        """
         self.root = list(range(size))
         self.rank = [1]*size
         
         
     def find(self, x):
+        """Encuentra el nodo raíz al que se conecta el nodo solicitado.
+        
+        Args:
+            x (int): Nodo al que se le encuentra el nodo raíz.
+            
+        Returns:
+            _int_: Nodo raíz al que se conecta x.
+        
+        """
+            
         if self.root[x] != x:
             self.root[x] = self.find(self.root[x])
         return self.root[x]
     
     
     def union(self, x, y):
+        """Realiza la unión de dos conjuntos, siempre y cuando una arista no
+        pertenezca al mismo conjunto.
+        
+        Args:
+            x (int): Nodo origen.
+            y (int): Nodo destino en donde se crea una arista.
+            
+        """
         rootX = self.find(x)
         rootY = self.find(y)
         if rootX != rootY:
@@ -600,4 +624,3 @@ class UnionFind:
             else:
                 self.root[rootY] = rootX
                 self.rank[rootX] +=1
-
