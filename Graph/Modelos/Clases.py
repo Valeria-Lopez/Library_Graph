@@ -725,6 +725,11 @@ class Grafo:
                 
                 vertice_data[i][0] += Fx * 0.01
                 vertice_data[i][1] += Fy * 0.01
+                
+                vertice_data[i][0] = compare(vertice_data[i][0], 0, ANCHO_VENTANA)
+                vertice_data[i][1] = compare(vertice_data[i][1], 0, ALTO_VENTANA)
+
+            pygame.time.wait(10)
             #M -= 1
 
 
