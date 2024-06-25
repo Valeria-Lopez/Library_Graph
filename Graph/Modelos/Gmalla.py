@@ -46,6 +46,8 @@ def graph_malla(m=0,n=0,nodo_s=0):
     g.prim(nodo_s)
     g.kruskal(n*n)
     g.kruskalInv()
+    g.dibujoSpring()
+    g.dibujoForce_D()
 
 
 
