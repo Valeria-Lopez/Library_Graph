@@ -70,6 +70,8 @@ def barabasiAlbertGraph(n, d, nodo_s=0):
     g.prim(nodo_s)
     g.kruskal(n)
     g.kruskalInv()
+    g.dibujoSpring()
+    g.dibujoForce_D()
 
 
          
