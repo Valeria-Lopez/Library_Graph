@@ -528,6 +528,206 @@ class Grafo:
         return True
 
 
+    def dibujoForce_D(self):
+        """
+        Utilizando pygame se muestra una visualización del grafo utilizando 
+        Force Directed.
+
+        """
+        # Inicializar Pygame
+        pygame.init()
+        
+        beta = .0001
+        #beta = 2.0
+        k = 1.0
+        alpha = 0.1
+        delta_t = 0.01
+        eta = 0.99
+        
+        new_dic = {}
+        for ori in self.diccionario.keys():
+            new_dic.setdefault(ori.get_name(),{})
+            for valor in self.diccionario[ori]:
+                    new_dic[ori.get_name()].setdefault(valor.get_name(),random.randint(1,10))
+                 
+        v = []
+        vertice_data = {}
+        for nodo in new_dic.keys():
+            vertice_data.setdefault(nodo,[random.randint(100, 500), random.randint(100, 500)])
+            v.append([0.0,0.0])
+        
+        ANCHO_VENTANA = 800
+        ALTO_VENTANA = 600
+        
+        # Crear la ventana
+        pantalla = pygame.display.set_mode((ANCHO_VENTANA, ALTO_VENTANA))
+        pygame.display.set_caption("Force_Directed")
+        
+        def pyGame(grafo,diccionario):
+            # Definir colores
+            BLANCO = (255, 255, 255)
+            ROJO = (255, 0, 0)
+            NEGRO = (0, 0, 0)
+                    
+            # Rellenar la pantalla con color blanco
+            pantalla.fill(BLANCO)
+                
+            # Dibujar los círculos
+            for i in diccionario:
+                pygame.draw.circle(pantalla, ROJO, grafo[i], 10)
+            
+            # Dibujar la línea que une los dos círculos
+            for i in diccionario:
+                for k in diccionario[i]:
+                    pygame.draw.line(pantalla, NEGRO, grafo[i], grafo[k], 1)
+            
+            # Actualizar la pantalla
+            pygame.display.flip()
+            
+        # Bucle principal
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                    
+            pyGame(vertice_data, new_dic)
+        
+            def forceAtrac(u,v):
+                dx = vertice_data[v][0] - vertice_data[u][0]
+                dy = vertice_data[v][1] - vertice_data[u][1]
+                ds2 = dx * dx + dy * dy
+                ds = math.sqrt(ds2)
+                ds3 = ds2 * ds
+                if ds3 == 0.0:
+                    const = 0
+                else:
+                    const = beta / (ds2 * ds)
+                return [-const * dx, -const * dy]
+            
+            def forceRepul(u,v,d):
+                dx = vertice_data[v][0] - vertice_data[u][0]
+                dy = vertice_data[v][1] - vertice_data[u][1]
+                ds = math.sqrt((dx * dx) + (dy * dy))
+                dl = ds - d
+                const = k * dl / ds
+                return [const * dx, const *dy]
+            
+            for i in new_dic.keys():
+                Fx = 0.0
+                Fy = 0.0
+                for j in new_dic.keys():
+                    Fij = [0.0,0.0]
+                    if i != j:
+                        if j not in vertice_data[i]:
+                            Fij = forceAtrac(i,j)
+                        elif j in vertice_data[i]:
+                            Fij = forceRepul(i,j,(new_dic[i][j]))
+                        Fx += Fij[0]
+                        Fy += Fij[1]       
+                v[i][0] = (v[i][0] + alpha * Fx * delta_t) * eta
+                v[i][1] = (v[i][1] + alpha * Fy * delta_t) * eta        
+                
+            for l in new_dic.keys():  
+                vertice_data[l][0] += v[l][0] * delta_t
+                vertice_data[l][1] += v[l][1] * delta_t
+                pyGame(vertice_data,new_dic)    
+
+
+    def dibujoSpring(self):
+        """
+        Utilizando pygame, se muestra una visualización del grafo, utilizando
+        el método spring.
+
+        """
+        # Inicializar Pygame
+        pygame.init()
+        
+        new_dic = {}
+        for ori in self.diccionario.keys():
+            new_dic.setdefault(ori.get_name(),{})
+            for valor in self.diccionario[ori]:
+                    new_dic[ori.get_name()].setdefault(valor.get_name(),random.randint(1,10))
+            
+        vertice_data = {}
+        for nodo in new_dic.keys():
+            vertice_data.setdefault(nodo,[random.randint(100, 500), random.randint(100, 500)])
+        
+        def distance(node, node2, datos):
+            deltaX = datos[node][0] - datos[node2][0]
+            deltaY = datos[node][1] - datos[node2][1]
+            return math.sqrt(deltaX * deltaX + deltaY * deltaY)
+        
+        def compare(val, mini, maxi):
+            if val < mini:
+                return mini
+            elif val > maxi:
+                return maxi
+            else:
+                return val
+            
+        ANCHO_VENTANA = 1000
+        ALTO_VENTANA = 600
+        
+        # Crear la ventana
+        pantalla = pygame.display.set_mode((ANCHO_VENTANA, ALTO_VENTANA))
+        pygame.display.set_caption("Spring")
+        
+        def pyGame(grafo,diccionario):
+            # Definir colores
+            BLANCO = (255, 255, 255)
+            ROJO = (255, 0, 0)
+            NEGRO = (0, 0, 0)
+                    
+            # Rellenar la pantalla con color blanco
+            pantalla.fill(NEGRO)
+                
+            # Dibujar los círculos
+            for i in diccionario:
+                pygame.draw.circle(pantalla, ROJO, grafo[i], 5)
+            
+            # Dibujar la línea que une los dos círculos
+            for i in diccionario:
+                for k in diccionario[i]:
+                    pygame.draw.line(pantalla, BLANCO, grafo[i], grafo[k], 1)
+            
+            # Actualizar la pantalla
+            pygame.display.flip()
+        #M = 100
+        # Bucle principal
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                    
+            pyGame(vertice_data, new_dic)
+            
+            for i in new_dic.keys():
+                Fx = 0.0
+                Fy = 0.0
+                for j in new_dic[i]:
+                    dij = distance(i, j, vertice_data)
+                    diference = dij - 10
+                    
+                    Fx += 0.15 * diference * ((vertice_data[j][0] - vertice_data[i][0])/dij)
+                    Fy += 0.15 * diference * ((vertice_data[j][1] - vertice_data[i][1])/dij)
+                carga2 =  (150 * 150) * (150 * 150)
+                for n in new_dic.keys():
+                    if i != n:
+                        din = distance(i, n, vertice_data)
+                        repulsion = carga2 / (din * din)
+                       
+                        Fx -= repulsion * ((vertice_data[n][0] - vertice_data[i][0])/din)
+                        Fy -= repulsion * ((vertice_data[n][1] - vertice_data[i][1])/din)
+                Fx = compare(Fx, -200, 200)
+                Fy = compare(Fy, -200, 200)
+                
+                vertice_data[i][0] += Fx * 0.01
+                vertice_data[i][1] += Fy * 0.01
+            #M -= 1
+
+
     def save_gephi(self, nombre_archivo:str):
         """Guarda el grafo generado en un archivo DOT.
 
